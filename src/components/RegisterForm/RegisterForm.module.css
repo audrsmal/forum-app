@@ -1,0 +1,46 @@
+.form {
+  max-width: 420px;
+  margin: 32px auto;
+  padding: 16px;
+  border: 1px solid #eee;
+  border-radius: 12px;
+}
+
+.title {
+  margin: 0 0 12px;
+}
+
+.label {
+  display: grid;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.input {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+
+.button {
+  margin-top: 16px;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+}
+
+.button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.error {
+  background: #fff0f0;
+  border: 1px solid #ffd0d0;
+  color: #a40000;
+  padding: 10px 12px;
+  border-radius: 10px;
+}
