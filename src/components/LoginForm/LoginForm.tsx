@@ -1,66 +1,69 @@
-import { FormEvent, useState } from "react";
-import { useRouter } from "next/router";
-import Cookies from "js-cookie";
-import { loginApi } from "../../api/auth";
-import styles from "./LoginForm.module.css";
+import Link from "next/link";
+import styles from "./styles.module.css";
 
-export default function LoginForm() {
-  const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+type LoginFormProps = {
+  email: string;
+  setEmail: (x: string) => void;
+  password: string;
+  setPassword: (x: string) => void;
+  onFormSubmit: () => void;
+  error?: string | null;
+  loading?: boolean;
+};
 
-  const onSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
-
-    try {
-      const data = await loginApi(email, password);
-      Cookies.set("token", data.token, { expires: 1 / 96 }); // ~15 minutes
-      router.push("/main");
-    } catch (err: any) {
-      const msg = err?.response?.data?.message || "Login failed";
-      setError(msg);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+const LoginForm = ({
+  email,
+  setEmail,
+  password,
+  setPassword,
+  onFormSubmit,
+  error,
+  loading,
+}: LoginFormProps) => {
   return (
-    <form className={styles.form} onSubmit={onSubmit}>
+    <div className={styles.main}>
       <h1 className={styles.title}>Login</h1>
 
-      {error && <div className={styles.error}>{error}</div>}
+      <div className={styles.form}>
+        {error && <div className={styles.error}>{error}</div>}
 
-      <label className={styles.label}>
-        Email
-        <input
-          className={styles.input}
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          type="email"
-          autoComplete="email"
-          required
-        />
-      </label>
+        <div className={styles.field}>
+          <div className={styles.fieldTitle}>Email</div>
+          <input
+            className={styles.input}
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
 
-      <label className={styles.label}>
-        Password
-        <input
-          className={styles.input}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          type="password"
-          autoComplete="current-password"
-          required
-        />
-      </label>
+        <div className={styles.field}>
+          <div className={styles.fieldTitle}>Password</div>
+          <input
+            className={styles.input}
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
 
-      <button className={styles.button} disabled={loading} type="submit">
-        {loading ? "Logging in..." : "Login"}
-      </button>
-    </form>
+        <button
+          className={styles.button}
+          onClick={onFormSubmit}
+          disabled={loading}
+        >
+          {loading ? "Logging in..." : "Login"}
+        </button>
+
+        <div className={styles.redirect}>
+          Don’t have an account?{" "}
+          <Link href="/register" className={styles.link}>
+            Register here
+          </Link>
+        </div>
+      </div>
+    </div>
   );
-}
+};
+
+export default LoginForm;

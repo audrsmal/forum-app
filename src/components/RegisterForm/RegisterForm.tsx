@@ -1,77 +1,85 @@
-import { FormEvent, useState } from "react";
-import { useRouter } from "next/router";
-import Cookies from "js-cookie";
-import { registerApi } from "../../api/auth";
-import styles from "./RegisterForm.module.css";
+import Link from "next/link";
+import styles from "./styles.module.css";
 
-export default function RegisterForm() {
-  const router = useRouter();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+type RegisterFormProps = {
+  name: string;
+  setName: (x: string) => void;
+  email: string;
+  setEmail: (x: string) => void;
+  password: string;
+  setPassword: (x: string) => void;
+  onFormSubmit: () => void;
+  error?: string | null;
+  loading?: boolean;
+};
 
-  const onSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
-
-    try {
-      const data = await registerApi(name, email, password);
-      Cookies.set("token", data.token, { expires: 1 / 96 }); // ~15 minutes
-      router.push("/main");
-    } catch (err: any) {
-      const msg = err?.response?.data?.message || "Register failed";
-      setError(msg);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+const RegisterForm = ({
+  name,
+  setName,
+  email,
+  setEmail,
+  password,
+  setPassword,
+  onFormSubmit,
+  error,
+  loading,
+}: RegisterFormProps) => {
   return (
-    <form className={styles.form} onSubmit={onSubmit}>
+    <div className={styles.main}>
       <h1 className={styles.title}>Register</h1>
 
-      {error && <div className={styles.error}>{error}</div>}
+      <div className={styles.form}>
+        {error && <div className={styles.error}>{error}</div>}
 
-      <label className={styles.label}>
-        Name
-        <input
-          className={styles.input}
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-      </label>
+        <div className={styles.field}>
+          <div className={styles.fieldTitle}>Name</div>
+          <input
+            className={styles.input}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            autoComplete="name"
+          />
+        </div>
 
-      <label className={styles.label}>
-        Email
-        <input
-          className={styles.input}
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          type="email"
-          autoComplete="email"
-          required
-        />
-      </label>
+        <div className={styles.field}>
+          <div className={styles.fieldTitle}>Email</div>
+          <input
+            className={styles.input}
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            autoComplete="email"
+          />
+        </div>
 
-      <label className={styles.label}>
-        Password
-        <input
-          className={styles.input}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          type="password"
-          autoComplete="new-password"
-          required
-        />
-      </label>
+        <div className={styles.field}>
+          <div className={styles.fieldTitle}>Password</div>
+          <input
+            className={styles.input}
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            autoComplete="new-password"
+          />
+        </div>
 
-      <button className={styles.button} disabled={loading} type="submit">
-        {loading ? "Creating..." : "Create account"}
-      </button>
-    </form>
+        <button
+          className={styles.button}
+          onClick={onFormSubmit}
+          disabled={loading}
+        >
+          {loading ? "Creating..." : "Create account"}
+        </button>
+
+        <div className={styles.redirect}>
+          Already have an account?{" "}
+          <Link href="/login" className={styles.link}>
+            Login here
+          </Link>
+        </div>
+      </div>
+    </div>
   );
-}
+};
+
+export default RegisterForm;
