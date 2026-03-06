@@ -1,0 +1,15 @@
+.main {
+  max-width: 1000px;
+  margin: 0 auto 32px;
+  padding: 0 16px;
+}
+
+.title {
+  margin-bottom: 20px;
+  text-transform: capitalize;
+}
+
+.questions {
+  display: grid;
+  gap: 12px;
+}

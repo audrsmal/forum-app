@@ -1,14 +1,22 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
-import styles from "./Header.module.css";
+import { useEffect, useState } from "react";
+import styles from "./styles.module.css";
 
 export default function Header() {
   const router = useRouter();
-  const token = Cookies.get("token");
+  const [isMounted, setIsMounted] = useState(false);
+  const [token, setToken] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    setToken(Cookies.get("token"));
+    setIsMounted(true);
+  }, []);
 
   const logout = () => {
     Cookies.remove("token");
+    setToken(undefined);
     router.push("/login");
   };
 
@@ -21,7 +29,7 @@ export default function Header() {
       </div>
 
       <nav className={styles.nav}>
-        {!token ? (
+        {!isMounted ? null : !token ? (
           <>
             <Link className={styles.link} href="/login">
               Login

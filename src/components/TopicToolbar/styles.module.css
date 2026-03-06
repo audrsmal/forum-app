@@ -1,0 +1,30 @@
+.main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin: 24px auto;
+  max-width: 1000px;
+  padding: 0 16px;
+}
+
+.askButton,
+.filter,
+.activeFilter {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.activeFilter {
+  background: #f0f0f0;
+  font-weight: 600;
+}
