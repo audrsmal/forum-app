@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 
 import LoginForm from "../../components/LoginForm/LoginForm";
+import PageTemplate from "../../components/PageTemplate/PageTemplate";
 import { loginApi } from "../../api/auth";
 import { api } from "../../api/axios";
 
@@ -39,9 +40,7 @@ export default function LoginPage() {
 
     try {
       const response = await loginApi(email, password);
-
       Cookies.set(userTokenKey, response.token, { expires: 1 / 96 });
-
       router.push("/main");
     } catch (err: any) {
       const msg = err?.response?.data?.message || "Login failed";
@@ -52,14 +51,16 @@ export default function LoginPage() {
   };
 
   return (
-    <LoginForm
-      email={email}
-      setEmail={setEmail}
-      password={password}
-      setPassword={setPassword}
-      onFormSubmit={onFormSubmit}
-      loading={loading}
-      error={error}
-    />
+    <PageTemplate>
+      <LoginForm
+        email={email}
+        setEmail={setEmail}
+        password={password}
+        setPassword={setPassword}
+        onFormSubmit={onFormSubmit}
+        loading={loading}
+        error={error}
+      />
+    </PageTemplate>
   );
 }

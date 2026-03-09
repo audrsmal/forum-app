@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 
 import RegisterForm from "../../components/RegisterForm/RegisterForm";
+import PageTemplate from "../../components/PageTemplate/PageTemplate";
 import { registerApi } from "../../api/auth";
 import { api } from "../../api/axios";
 
@@ -32,7 +33,6 @@ export default function RegisterPage() {
 
   useEffect(() => {
     validateJwt();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onFormSubmit = async () => {
@@ -41,7 +41,6 @@ export default function RegisterPage() {
 
     try {
       const response = await registerApi(name, email, password);
-
       Cookies.set(userTokenKey, response.token, { expires: 1 / 96 });
       router.push("/main");
     } catch (err: any) {
@@ -53,16 +52,18 @@ export default function RegisterPage() {
   };
 
   return (
-    <RegisterForm
-      name={name}
-      setName={setName}
-      email={email}
-      setEmail={setEmail}
-      password={password}
-      setPassword={setPassword}
-      onFormSubmit={onFormSubmit}
-      loading={loading}
-      error={error}
-    />
+    <PageTemplate>
+      <RegisterForm
+        name={name}
+        setName={setName}
+        email={email}
+        setEmail={setEmail}
+        password={password}
+        setPassword={setPassword}
+        onFormSubmit={onFormSubmit}
+        loading={loading}
+        error={error}
+      />
+    </PageTemplate>
   );
 }

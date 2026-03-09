@@ -6,42 +6,50 @@ import styles from "./styles.module.css";
 
 export default function Header() {
   const router = useRouter();
-  const [isMounted, setIsMounted] = useState(false);
-  const [token, setToken] = useState<string | undefined>(undefined);
+  const [mounted, setMounted] = useState(false);
+  const [isLogged, setIsLogged] = useState(false);
 
   useEffect(() => {
-    setToken(Cookies.get("token"));
-    setIsMounted(true);
+    const token = Cookies.get("token");
+    setIsLogged(!!token);
+    setMounted(true);
   }, []);
 
   const logout = () => {
     Cookies.remove("token");
-    setToken(undefined);
+    setIsLogged(false);
     router.push("/login");
   };
 
   return (
     <header className={styles.header}>
       <div className={styles.left}>
-        <Link className={styles.brand} href="/main">
+        <Link href={isLogged ? "/main" : "/login"} className={styles.logo}>
           Forum
         </Link>
       </div>
 
       <nav className={styles.nav}>
-        {!isMounted ? null : !token ? (
+        {mounted && isLogged ? (
           <>
-            <Link className={styles.link} href="/login">
+            <Link href="/main" className={styles.link}>
+              Main
+            </Link>
+
+            <button onClick={logout} className={styles.button}>
+              Logout
+            </button>
+          </>
+        ) : (
+          <>
+            <Link href="/login" className={styles.link}>
               Login
             </Link>
-            <Link className={styles.link} href="/register">
+
+            <Link href="/register" className={styles.link}>
               Register
             </Link>
           </>
-        ) : (
-          <button className={styles.button} onClick={logout}>
-            Logout
-          </button>
         )}
       </nav>
     </header>

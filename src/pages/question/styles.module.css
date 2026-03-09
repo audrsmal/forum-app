@@ -15,14 +15,35 @@
   margin: 0 0 12px;
 }
 
-.body {
+.meta,
+.answerMeta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.body,
+.answerBody {
   color: #444;
+  line-height: 1.5;
+}
+
+.section {
+  margin-top: 24px;
+}
+
+.sectionTitle {
+  margin: 0 0 12px;
+  font-size: 20px;
 }
 
 .answerForm {
-  margin-top: 24px;
   display: grid;
-  gap: 8px;
+  gap: 10px;
 }
 
 .fieldTitle {
@@ -30,14 +51,16 @@
 }
 
 .textarea {
-  min-height: 120px;
+  min-height: 140px;
   border: 1px solid #ddd;
   border-radius: 10px;
   padding: 10px 12px;
   resize: vertical;
+  width: 100%;
 }
 
-.button {
+.button,
+.activeButton {
   width: fit-content;
   padding: 10px 14px;
   border-radius: 10px;
@@ -46,8 +69,19 @@
   cursor: pointer;
 }
 
+.activeButton {
+  background: #f0f0f0;
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
 .answers {
-  margin-top: 24px;
   display: grid;
   gap: 12px;
 }
@@ -57,4 +91,19 @@
   border: 1px solid #e5e5e5;
   border-radius: 12px;
   background: white;
+}
+
+.emptyText {
+  color: #666;
+  padding: 12px 0;
+}
+
+.deleteButton {
+  width: fit-content;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #e0b4b4;
+  background: white;
+  color: #b00020;
+  cursor: pointer;
 }

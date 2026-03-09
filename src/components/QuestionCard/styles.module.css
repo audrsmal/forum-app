@@ -1,15 +1,18 @@
 .card {
-  display: block;
   padding: 16px;
   border: 1px solid #e5e5e5;
   border-radius: 12px;
-  text-decoration: none;
-  color: inherit;
   background: white;
 }
 
-.card:hover {
-  background: #fafafa;
+.content {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.content:hover {
+  opacity: 0.95;
 }
 
 .top {
@@ -30,7 +33,45 @@
   white-space: nowrap;
 }
 
+.meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+  font-size: 14px;
+  color: #666;
+}
+
 .body {
   margin-top: 10px;
   color: #444;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.button,
+.activeButton {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: white;
+  cursor: pointer;
+}
+
+.activeButton {
+  background: #f0f0f0;
+  font-weight: 600;
+}
+
+.deleteButton {
+  padding: 8px 12px;
+  border: 1px solid #e0b4b4;
+  border-radius: 10px;
+  background: white;
+  color: #b00020;
+  cursor: pointer;
 }

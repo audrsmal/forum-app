@@ -21,12 +21,14 @@ const AskQuestionForm = ({
   const [loading, setLoading] = useState(false);
 
   const submit = async () => {
+    if (!title.trim() || !body.trim()) return;
+
     setLoading(true);
 
     try {
       await onSubmit({
-        title,
-        body,
+        title: title.trim(),
+        body: body.trim(),
         topic,
       });
 
@@ -43,31 +45,43 @@ const AskQuestionForm = ({
       <div className={styles.modal}>
         <h2 className={styles.title}>Ask question</h2>
 
-        <div className={styles.field}>
-          <div className={styles.fieldTitle}>Title</div>
-          <input
-            className={styles.input}
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-        </div>
+        <div className={styles.form}>
+          <div className={styles.field}>
+            <div className={styles.label}>Title</div>
+            <input
+              className={styles.input}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Write your question title"
+            />
+          </div>
 
-        <div className={styles.field}>
-          <div className={styles.fieldTitle}>Body</div>
-          <textarea
-            className={styles.textarea}
-            value={body}
-            onChange={(e) => setBody(e.target.value)}
-          />
-        </div>
+          <div className={styles.field}>
+            <div className={styles.label}>Body</div>
+            <textarea
+              className={styles.textarea}
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
+              placeholder="Describe your question"
+            />
+          </div>
 
-        <div className={styles.actions}>
-          <button className={styles.secondaryButton} onClick={onClose}>
-            Cancel
-          </button>
-          <button className={styles.button} onClick={submit} disabled={loading}>
-            {loading ? "Creating..." : "Create"}
-          </button>
+          <div className={styles.actions}>
+            <button
+              className={styles.secondaryButton}
+              onClick={onClose}
+              disabled={loading}
+            >
+              Cancel
+            </button>
+            <button
+              className={styles.button}
+              onClick={submit}
+              disabled={loading}
+            >
+              {loading ? "Creating..." : "Create"}
+            </button>
+          </div>
         </div>
       </div>
     </div>
