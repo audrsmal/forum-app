@@ -9,6 +9,9 @@ type LoginFormProps = {
   onFormSubmit: () => void;
   error?: string | null;
   loading?: boolean;
+  emailError?: string;
+  passwordError?: string;
+  isFormValid: boolean;
 };
 
 const LoginForm = ({
@@ -19,13 +22,16 @@ const LoginForm = ({
   onFormSubmit,
   error,
   loading,
+  emailError,
+  passwordError,
+  isFormValid,
 }: LoginFormProps) => {
   return (
     <div className={styles.main}>
       <h1 className={styles.title}>Login</h1>
 
       <div className={styles.form}>
-        {error && <div className={styles.error}>{error}</div>}
+        {error ? <div className={styles.error}>{error}</div> : null}
 
         <div className={styles.field}>
           <div className={styles.fieldTitle}>Email</div>
@@ -34,7 +40,12 @@ const LoginForm = ({
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            autoComplete="email"
+            placeholder="Enter your email"
           />
+          {emailError ? (
+            <div className={styles.fieldError}>{emailError}</div>
+          ) : null}
         </div>
 
         <div className={styles.field}>
@@ -44,13 +55,18 @@ const LoginForm = ({
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
+            placeholder="Enter your password"
           />
+          {passwordError ? (
+            <div className={styles.fieldError}>{passwordError}</div>
+          ) : null}
         </div>
 
         <button
           className={styles.button}
           onClick={onFormSubmit}
-          disabled={loading}
+          disabled={loading || !isFormValid}
         >
           {loading ? "Logging in..." : "Login"}
         </button>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 
@@ -6,6 +6,7 @@ import LoginForm from "../../components/LoginForm/LoginForm";
 import PageTemplate from "../../components/PageTemplate/PageTemplate";
 import { loginApi } from "../../api/auth";
 import { api } from "../../api/axios";
+import { validateEmail } from "../../utils/validation";
 
 const userTokenKey = "token";
 
@@ -17,6 +18,16 @@ export default function LoginPage() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const emailError = useMemo(() => validateEmail(email), [email]);
+
+  const passwordError = useMemo(() => {
+    if (!password) return "";
+    return "";
+  }, [password]);
+
+  const isFormValid =
+    !!email.trim() && !!password.trim() && !emailError && !passwordError;
 
   const validateJwt = async () => {
     const token = Cookies.get(userTokenKey);
@@ -35,11 +46,13 @@ export default function LoginPage() {
   }, []);
 
   const onFormSubmit = async () => {
+    if (!isFormValid) return;
+
     setError(null);
     setLoading(true);
 
     try {
-      const response = await loginApi(email, password);
+      const response = await loginApi(email.trim().toLowerCase(), password);
       Cookies.set(userTokenKey, response.token, { expires: 1 / 96 });
       router.push("/main");
     } catch (err: any) {
@@ -60,6 +73,9 @@ export default function LoginPage() {
         onFormSubmit={onFormSubmit}
         loading={loading}
         error={error}
+        emailError={emailError}
+        passwordError={passwordError}
+        isFormValid={isFormValid}
       />
     </PageTemplate>
   );

@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import styles from "./styles.module.css";
 
 import PageTemplate from "../../components/PageTemplate/PageTemplate";
+import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
 import {
   AnswerType,
   createAnswer,
@@ -36,6 +37,9 @@ export default function QuestionPage() {
   const [answers, setAnswers] = useState<AnswerType[]>([]);
   const [answerBody, setAnswerBody] = useState("");
   const [userId, setUserId] = useState<string>("");
+
+  const [showDeleteQuestionModal, setShowDeleteQuestionModal] = useState(false);
+  const [deleteAnswerId, setDeleteAnswerId] = useState<string | null>(null);
 
   const fetchMe = async () => {
     const token = Cookies.get("token");
@@ -91,13 +95,11 @@ export default function QuestionPage() {
     await fetchData();
   };
 
-  const onDeleteQuestion = async () => {
+  const onConfirmDeleteQuestion = async () => {
     if (!id || typeof id !== "string") return;
 
-    const confirmed = confirm("Are you sure you want to delete this question?");
-    if (!confirmed) return;
-
     await deleteQuestion(id);
+    setShowDeleteQuestionModal(false);
     router.push("/main");
   };
 
@@ -111,11 +113,11 @@ export default function QuestionPage() {
     await fetchData();
   };
 
-  const onDeleteAnswer = async (answerId: string) => {
-    const confirmed = confirm("Delete this answer?");
-    if (!confirmed) return;
+  const onConfirmDeleteAnswer = async () => {
+    if (!deleteAnswerId) return;
 
-    await deleteAnswer(answerId);
+    await deleteAnswer(deleteAnswerId);
+    setDeleteAnswerId(null);
     await fetchData();
   };
 
@@ -163,7 +165,7 @@ export default function QuestionPage() {
                 {question.userId === userId ? (
                   <button
                     className={styles.deleteButton}
-                    onClick={onDeleteQuestion}
+                    onClick={() => setShowDeleteQuestionModal(true)}
                   >
                     Delete
                   </button>
@@ -212,7 +214,7 @@ export default function QuestionPage() {
                         {answer.userId === userId ? (
                           <button
                             className={styles.deleteButton}
-                            onClick={() => onDeleteAnswer(answer.id)}
+                            onClick={() => setDeleteAnswerId(answer.id)}
                           >
                             Delete
                           </button>
@@ -243,6 +245,30 @@ export default function QuestionPage() {
           </>
         )}
       </div>
+
+      {showDeleteQuestionModal ? (
+        <ConfirmModal
+          title="Delete question"
+          message="This action cannot be undone."
+          confirmText="Delete"
+          cancelText="Cancel"
+          isDanger
+          onConfirm={onConfirmDeleteQuestion}
+          onCancel={() => setShowDeleteQuestionModal(false)}
+        />
+      ) : null}
+
+      {deleteAnswerId ? (
+        <ConfirmModal
+          title="Delete answer"
+          message="This action cannot be undone."
+          confirmText="Delete"
+          cancelText="Cancel"
+          isDanger
+          onConfirm={onConfirmDeleteAnswer}
+          onCancel={() => setDeleteAnswerId(null)}
+        />
+      ) : null}
     </PageTemplate>
   );
 }

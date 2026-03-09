@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import styles from "./styles.module.css";
 
 import PageTemplate from "../../components/PageTemplate/PageTemplate";
+import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
 import QuestionCard from "../../components/QuestionCard/QuestionCard";
 import TopicToolbar from "../../components/TopicToolbar/TopicToolbar";
 import AskQuestionForm from "../../components/AskQuestionForm/AskQuestionForm";
@@ -35,6 +36,7 @@ export default function TopicPage() {
   );
   const [showAskModal, setShowAskModal] = useState(false);
   const [userId, setUserId] = useState<string>("");
+  const [deleteQuestionId, setDeleteQuestionId] = useState<string | null>(null);
 
   const fetchMe = async () => {
     const token = Cookies.get("token");
@@ -87,24 +89,24 @@ export default function TopicPage() {
     await fetchQuestions();
   };
 
-  const onDeleteQuestion = async (id: string) => {
-    const confirmed = confirm("Are you sure you want to delete this question?");
-    if (!confirmed) return;
+  const onConfirmDeleteQuestion = async () => {
+    if (!deleteQuestionId) return;
 
-    await deleteQuestion(id);
+    await deleteQuestion(deleteQuestionId);
+    setDeleteQuestionId(null);
     await fetchQuestions();
   };
 
   return (
     <PageTemplate>
       <div className={styles.main}>
+        <h1 className={styles.title}>{topic}</h1>
+
         <TopicToolbar
           filter={filter}
           setFilter={setFilter}
           onAskQuestionClick={() => setShowAskModal(true)}
         />
-
-        <h1 className={styles.title}>{topic}</h1>
 
         <div className={styles.questions}>
           {questions.map((question) => (
@@ -113,7 +115,7 @@ export default function TopicPage() {
               question={question}
               onLike={onLikeQuestion}
               onDislike={onDislikeQuestion}
-              onDelete={onDeleteQuestion}
+              onDelete={(id) => setDeleteQuestionId(id)}
               canDelete={question.userId === userId}
             />
           ))}
@@ -124,6 +126,18 @@ export default function TopicPage() {
             topic={topic}
             onSubmit={onCreateQuestion}
             onClose={() => setShowAskModal(false)}
+          />
+        ) : null}
+
+        {deleteQuestionId ? (
+          <ConfirmModal
+            title="Delete question"
+            message="This action cannot be undone."
+            confirmText="Delete"
+            cancelText="Cancel"
+            isDanger
+            onConfirm={onConfirmDeleteQuestion}
+            onCancel={() => setDeleteQuestionId(null)}
           />
         ) : null}
       </div>
