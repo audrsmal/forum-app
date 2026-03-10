@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import ConfirmModal from "../ConfirmModal/ConfirmModal";
+import { clearAuthSession } from "../../utils/auth";
 
 export default function Header() {
   const router = useRouter();
@@ -17,8 +18,8 @@ export default function Header() {
     setMounted(true);
   }, []);
 
-  const logout = () => {
-    Cookies.remove("token");
+  const confirmLogout = () => {
+    clearAuthSession();
     setIsLogged(false);
     setShowLogoutModal(false);
     router.push("/login");
@@ -67,7 +68,7 @@ export default function Header() {
           message="Are you sure you want to log out?"
           confirmText="Logout"
           cancelText="Cancel"
-          onConfirm={logout}
+          onConfirm={confirmLogout}
           onCancel={() => setShowLogoutModal(false)}
         />
       ) : null}

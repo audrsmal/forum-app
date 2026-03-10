@@ -7,8 +7,11 @@ import PageTemplate from "../../components/PageTemplate/PageTemplate";
 import { loginApi } from "../../api/auth";
 import { api } from "../../api/axios";
 import { validateEmail } from "../../utils/validation";
-
-const userTokenKey = "token";
+import {
+  setAuthSession,
+  userTokenKey,
+  clearAuthSession,
+} from "../../utils/auth";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -37,7 +40,7 @@ export default function LoginPage() {
       await api.get("/users/me");
       router.push("/main");
     } catch {
-      Cookies.remove(userTokenKey);
+      clearAuthSession();
     }
   };
 
@@ -53,7 +56,8 @@ export default function LoginPage() {
 
     try {
       const response = await loginApi(email.trim().toLowerCase(), password);
-      Cookies.set(userTokenKey, response.token, { expires: 1 / 96 });
+
+      setAuthSession(response.token);
       router.push("/main");
     } catch (err: any) {
       const msg = err?.response?.data?.message || "Login failed";

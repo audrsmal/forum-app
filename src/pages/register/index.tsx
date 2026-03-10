@@ -6,13 +6,18 @@ import RegisterForm from "../../components/RegisterForm/RegisterForm";
 import PageTemplate from "../../components/PageTemplate/PageTemplate";
 import { registerApi } from "../../api/auth";
 import { api } from "../../api/axios";
+
 import {
   validateEmail,
   validateName,
   validatePassword,
 } from "../../utils/validation";
 
-const userTokenKey = "token";
+import {
+  setAuthSession,
+  userTokenKey,
+  clearAuthSession,
+} from "../../utils/auth";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -44,7 +49,7 @@ export default function RegisterPage() {
       await api.get("/users/me");
       router.push("/main");
     } catch {
-      Cookies.remove(userTokenKey);
+      clearAuthSession();
     }
   };
 
@@ -65,7 +70,8 @@ export default function RegisterPage() {
         password,
       );
 
-      Cookies.set(userTokenKey, response.token, { expires: 1 / 96 });
+      setAuthSession(response.token);
+
       router.push("/main");
     } catch (err: any) {
       const msg = err?.response?.data?.message || "Register failed";
