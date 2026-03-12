@@ -8,6 +8,7 @@ import { clearAuthSession } from "../../utils/auth";
 
 export default function Header() {
   const router = useRouter();
+
   const [mounted, setMounted] = useState(false);
   const [isLogged, setIsLogged] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -28,41 +29,44 @@ export default function Header() {
   return (
     <>
       <header className={styles.header}>
-        <div className={styles.left}>
-          <Link href={isLogged ? "/main" : "/login"} className={styles.logo}>
-            Forum
-          </Link>
+        <div className={styles.inner}>
+          <div className={styles.left}>
+            <Link href={isLogged ? "/main" : "/login"} className={styles.logo}>
+              <span className={styles.logoGlow}></span>
+              <span className={styles.logoText}>Forum</span>
+            </Link>
+          </div>
+
+          <nav className={styles.nav}>
+            {mounted && isLogged ? (
+              <>
+                <Link href="/main" className={styles.link}>
+                  Main
+                </Link>
+
+                <button
+                  onClick={() => setShowLogoutModal(true)}
+                  className={styles.logoutButton}
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link href="/login" className={styles.link}>
+                  Login
+                </Link>
+
+                <Link href="/register" className={styles.link}>
+                  Register
+                </Link>
+              </>
+            )}
+          </nav>
         </div>
-
-        <nav className={styles.nav}>
-          {mounted && isLogged ? (
-            <>
-              <Link href="/main" className={styles.link}>
-                Main
-              </Link>
-
-              <button
-                onClick={() => setShowLogoutModal(true)}
-                className={styles.button}
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-            <>
-              <Link href="/login" className={styles.link}>
-                Login
-              </Link>
-
-              <Link href="/register" className={styles.link}>
-                Register
-              </Link>
-            </>
-          )}
-        </nav>
       </header>
 
-      {showLogoutModal ? (
+      {showLogoutModal && (
         <ConfirmModal
           title="Logout"
           message="Are you sure you want to log out?"
@@ -71,7 +75,7 @@ export default function Header() {
           onConfirm={confirmLogout}
           onCancel={() => setShowLogoutModal(false)}
         />
-      ) : null}
+      )}
     </>
   );
 }

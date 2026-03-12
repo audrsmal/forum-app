@@ -1,7 +1,142 @@
 .footer {
-  padding: 16px;
-  border-top: 1px solid #e6e6e6;
-  text-align: center;
-  margin-top: 24px;
-  color: #666;
+  background: #0b0b13;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 48px;
+  padding-bottom: 28px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+}
+
+.brand {
+  max-width: 320px;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  color: white;
+}
+
+.description {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.6;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.columnTitle {
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: white;
+}
+
+.column a {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.column a:hover {
+  color: white;
+}
+
+/* SOCIAL ICONS */
+
+.socials {
+  display: flex;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.social {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+
+  transition: all 0.25s ease;
+  position: relative;
+}
+
+/* Instagram */
+
+.social.instagram:hover {
+  background: linear-gradient(45deg, #f58529, #dd2a7b, #8134af, #515bd4);
+
+  color: white;
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 6px 20px rgba(221, 42, 123, 0.5),
+    0 0 12px rgba(221, 42, 123, 0.4);
+}
+
+/* Facebook */
+
+.social.facebook:hover {
+  background: #1877f2;
+  color: white;
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 6px 20px rgba(24, 119, 242, 0.5),
+    0 0 10px rgba(24, 119, 242, 0.4);
+}
+
+/* X */
+
+.social.twitter:hover {
+  background: white;
+  color: black;
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 6px 18px rgba(255, 255, 255, 0.35),
+    0 0 10px rgba(255, 255, 255, 0.25);
+}
+
+/* MOBILE */
+
+@media (max-width: 900px) {
+  .columns {
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+}
+
+@media (max-width: 600px) {
+  .columns {
+    grid-template-columns: 1fr;
+  }
+
+  .footer {
+    padding-top: 36px;
+  }
+
+  .bottom {
+    margin-top: 28px;
+  }
 }

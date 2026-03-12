@@ -108,3 +108,14 @@ export async function deleteAnswer(id: string) {
   const response = await api.delete(`/answer/${id}`);
   return response.data;
 }
+
+export type TopicStatsType = {
+  topic: string;
+  questionsCount: number;
+  answersCount: number;
+};
+
+export async function getTopicStats() {
+  const response = await api.get<{ topics: TopicStatsType[] }>("/topics/stats");
+  return response.data;
+}
