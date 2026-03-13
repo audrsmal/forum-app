@@ -1,21 +1,10 @@
-.main {
+.toolbar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   gap: 16px;
-  margin: 24px auto;
-  max-width: 1000px;
-  padding: 0 16px;
-}
-
-.askButton,
-.filter,
-.activeFilter {
-  padding: 10px 14px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
-  background: white;
-  cursor: pointer;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
 }
 
 .filters {
@@ -24,7 +13,72 @@
   flex-wrap: wrap;
 }
 
-.activeFilter {
-  background: #f0f0f0;
-  font-weight: 600;
+.filterButton,
+.active,
+.askButton {
+  border: none;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    color 0.2s ease;
+}
+
+.filterButton {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  font-size: 14px;
+}
+
+.filterButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.active {
+  padding: 8px 14px;
+  border-radius: 10px;
+  color: white;
+  font-size: 14px;
+  background: linear-gradient(135deg, #ff5fb2, #b16cff, #7c5cff);
+  box-shadow: 0 8px 22px rgba(177, 108, 255, 0.28);
+}
+
+.askButton {
+  padding: 10px 18px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ff5fb2, #b16cff, #7c5cff);
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 10px 24px rgba(124, 92, 255, 0.28);
+}
+
+.askButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px rgba(177, 108, 255, 0.38);
+}
+
+@media (max-width: 640px) {
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filters {
+    width: 100%;
+  }
+
+  .filterButton,
+  .active {
+    flex: 1;
+    text-align: center;
+  }
+
+  .askButton {
+    width: 100%;
+  }
 }

@@ -24,7 +24,7 @@ const AskQuestionForm = ({
   const [showClearDraftModal, setShowClearDraftModal] = useState(false);
   const [showLeaveModal, setShowLeaveModal] = useState(false);
 
-  const hasDraft = title.trim() || body.trim();
+  const hasDraft = !!title.trim() || !!body.trim();
 
   const submit = async () => {
     if (!title.trim() || !body.trim()) return;
@@ -80,7 +80,17 @@ const AskQuestionForm = ({
     <>
       <div className={styles.overlay}>
         <div className={styles.modal}>
-          <h2 className={styles.title}>Ask question</h2>
+          <div className={styles.badge}>New discussion</div>
+
+          <div className={styles.header}>
+            <div>
+              <h2 className={styles.title}>Ask a question</h2>
+              <p className={styles.subtitle}>
+                Start a new thread in{" "}
+                <span className={styles.topic}>{topic}</span>.
+              </p>
+            </div>
+          </div>
 
           <div className={styles.form}>
             <div className={styles.field}>
@@ -89,7 +99,7 @@ const AskQuestionForm = ({
                 className={styles.input}
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="Write your question title"
+                placeholder="Write a clear question title"
               />
             </div>
 
@@ -99,7 +109,7 @@ const AskQuestionForm = ({
                 className={styles.textarea}
                 value={body}
                 onChange={(e) => setBody(e.target.value)}
-                placeholder="Describe your question"
+                placeholder="Add context, details, examples, or your spicy opinion..."
               />
             </div>
 
@@ -123,9 +133,9 @@ const AskQuestionForm = ({
               <button
                 className={styles.button}
                 onClick={submit}
-                disabled={loading}
+                disabled={loading || !title.trim() || !body.trim()}
               >
-                {loading ? "Creating..." : "Create"}
+                {loading ? "Creating..." : "Create question"}
               </button>
             </div>
           </div>

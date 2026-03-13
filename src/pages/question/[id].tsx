@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import Cookies from "js-cookie";
+import Link from "next/link";
 import styles from "./styles.module.css";
 
 import PageTemplate from "../../components/PageTemplate/PageTemplate";
@@ -19,15 +19,6 @@ import {
   QuestionType,
 } from "../../api/questions";
 import { formatDate } from "../../utils/formatDate";
-import { api } from "../../api/axios";
-
-type MeResponse = {
-  user: {
-    id: string;
-    name: string;
-    email: string;
-  };
-};
 
 export default function QuestionPage() {
   const router = useRouter();
@@ -41,32 +32,22 @@ export default function QuestionPage() {
   const [showDeleteQuestionModal, setShowDeleteQuestionModal] = useState(false);
   const [deleteAnswerId, setDeleteAnswerId] = useState<string | null>(null);
 
-  const fetchMe = async () => {
-    const token = Cookies.get("token");
-    if (!token) return;
-
-    try {
-      const response = await api.get<MeResponse>("/users/me");
-      setUserId(response.data.user.id);
-    } catch {
-      setUserId("");
-    }
-  };
-
-  const fetchData = async (currentUserId?: string) => {
+  const fetchData = async () => {
     if (!id || typeof id !== "string") return;
 
-    const finalUserId = currentUserId || userId || undefined;
-
-    const questionResponse = await getQuestionById(id, finalUserId);
-    const answersResponse = await getAnswersByQuestionId(id, finalUserId);
+    const questionResponse = await getQuestionById(id, userId || undefined);
+    const answersResponse = await getAnswersByQuestionId(
+      id,
+      userId || undefined,
+    );
 
     setQuestion(questionResponse.question);
     setAnswers(answersResponse.answers);
   };
 
   useEffect(() => {
-    fetchMe();
+    const storedUserId = localStorage.getItem("userId") || "";
+    setUserId(storedUserId);
   }, []);
 
   useEffect(() => {
@@ -76,21 +57,19 @@ export default function QuestionPage() {
   const onCreateAnswer = async () => {
     if (!id || typeof id !== "string" || !answerBody.trim()) return;
 
-    await createAnswer(id, { body: answerBody });
+    await createAnswer(id, { body: answerBody.trim() });
     setAnswerBody("");
     await fetchData();
   };
 
   const onLikeQuestion = async () => {
     if (!id || typeof id !== "string") return;
-
     await likeQuestion(id);
     await fetchData();
   };
 
   const onDislikeQuestion = async () => {
     if (!id || typeof id !== "string") return;
-
     await dislikeQuestion(id);
     await fetchData();
   };
@@ -125,17 +104,20 @@ export default function QuestionPage() {
     <PageTemplate>
       <div className={styles.main}>
         {!question ? (
-          <div>Loading...</div>
+          <div className={styles.loading}>Loading...</div>
         ) : (
           <>
-            <div className={styles.questionBox}>
-              <h1 className={styles.title}>{question.title}</h1>
-
-              <div className={styles.meta}>
-                <span>{question.author?.name || "Unknown author"}</span>
-                <span>•</span>
-                <span>{formatDate(question.createdAt)}</span>
+            <section className={styles.questionSection}>
+              <div className={styles.questionTop}>
+                <div className={styles.questionTag}>Question</div>
+                <div className={styles.questionMeta}>
+                  <span>{question.author?.name || "Unknown author"}</span>
+                  <span>•</span>
+                  <span>{formatDate(question.createdAt)}</span>
+                </div>
               </div>
+
+              <h1 className={styles.title}>{question.title}</h1>
 
               <div className={styles.body}>{question.body}</div>
 
@@ -167,23 +149,30 @@ export default function QuestionPage() {
                     className={styles.deleteButton}
                     onClick={() => setShowDeleteQuestionModal(true)}
                   >
-                    Delete
+                    Delete question
                   </button>
                 ) : null}
               </div>
-            </div>
+            </section>
 
-            <div className={styles.section}>
-              <h2 className={styles.sectionTitle}>Answers</h2>
+            <section className={styles.section}>
+              <div className={styles.sectionHeader}>
+                <h2 className={styles.sectionTitle}>Answers</h2>
+                <div className={styles.sectionCount}>
+                  {answers.length} {answers.length === 1 ? "answer" : "answers"}
+                </div>
+              </div>
 
               <div className={styles.answers}>
                 {answers.length > 0 ? (
                   answers.map((answer) => (
-                    <div key={answer.id} className={styles.answerCard}>
-                      <div className={styles.answerMeta}>
-                        <span>{answer.author?.name || "Unknown author"}</span>
-                        <span>•</span>
-                        <span>{formatDate(answer.createdAt)}</span>
+                    <article key={answer.id} className={styles.answerCard}>
+                      <div className={styles.answerHeader}>
+                        <div className={styles.answerMeta}>
+                          <span>{answer.author?.name || "Unknown author"}</span>
+                          <span>•</span>
+                          <span>{formatDate(answer.createdAt)}</span>
+                        </div>
                       </div>
 
                       <div className={styles.answerBody}>{answer.body}</div>
@@ -216,32 +205,52 @@ export default function QuestionPage() {
                             className={styles.deleteButton}
                             onClick={() => setDeleteAnswerId(answer.id)}
                           >
-                            Delete
+                            Delete answer
                           </button>
                         ) : null}
                       </div>
-                    </div>
+                    </article>
                   ))
                 ) : (
-                  <div className={styles.emptyText}>No answers yet.</div>
+                  <div className={styles.emptyState}>
+                    No answers yet. Be the first to answer.
+                  </div>
                 )}
               </div>
-            </div>
+            </section>
 
-            <div className={styles.section}>
-              <h2 className={styles.sectionTitle}>Write your answer</h2>
+            <section className={styles.section}>
+              <div className={styles.sectionHeader}>
+                <h2 className={styles.sectionTitle}>Write your answer</h2>
+              </div>
 
               <div className={styles.answerForm}>
                 <textarea
                   className={styles.textarea}
                   value={answerBody}
                   onChange={(e) => setAnswerBody(e.target.value)}
+                  placeholder="Share your answer..."
                 />
-                <button className={styles.button} onClick={onCreateAnswer}>
+                <button
+                  className={styles.submitButton}
+                  onClick={onCreateAnswer}
+                  disabled={!answerBody.trim()}
+                >
                   Submit answer
                 </button>
               </div>
-            </div>
+
+              {question.topic ? (
+                <div className={styles.backArea}>
+                  <Link
+                    href={`/topic/${question.topic}`}
+                    className={styles.backButton}
+                  >
+                    ← Back to {question.topic} questions
+                  </Link>
+                </div>
+              ) : null}
+            </section>
           </>
         )}
       </div>

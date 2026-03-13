@@ -24,7 +24,7 @@ const ConfirmModal = ({
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <h2 className={styles.title}>{title}</h2>
 
-        <div className={styles.message}>{message}</div>
+        <p className={styles.message}>{message}</p>
 
         <div className={styles.actions}>
           <button className={styles.cancelButton} onClick={onCancel}>

@@ -12,29 +12,31 @@ const TopicToolbar = ({
   onAskQuestionClick,
 }: TopicToolbarProps) => {
   return (
-    <div className={styles.main}>
+    <div className={styles.toolbar}>
       <button className={styles.askButton} onClick={onAskQuestionClick}>
         Ask question
       </button>
 
       <div className={styles.filters}>
         <button
-          className={filter === "all" ? styles.activeFilter : styles.filter}
+          className={filter === "all" ? styles.active : styles.filterButton}
           onClick={() => setFilter("all")}
         >
           All
         </button>
+
         <button
           className={
-            filter === "answered" ? styles.activeFilter : styles.filter
+            filter === "answered" ? styles.active : styles.filterButton
           }
           onClick={() => setFilter("answered")}
         >
           Answered
         </button>
+
         <button
           className={
-            filter === "unanswered" ? styles.activeFilter : styles.filter
+            filter === "unanswered" ? styles.active : styles.filterButton
           }
           onClick={() => setFilter("unanswered")}
         >

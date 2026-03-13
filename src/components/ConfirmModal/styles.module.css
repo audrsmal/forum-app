@@ -1,76 +1,162 @@
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.35);
+  z-index: 1200;
+  padding: 24px 16px;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px 16px;
-  z-index: 1100;
+
+  background:
+    radial-gradient(circle at top, rgba(124, 92, 255, 0.12), transparent 30%),
+    rgba(4, 4, 10, 0.74);
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  animation: overlayFade 0.18s ease;
 }
 
 .modal {
   width: 100%;
   max-width: 460px;
-  background: #ffffff;
-  border-radius: 20px;
-  padding: 24px;
   box-sizing: border-box;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+
+  padding: 28px;
+  border-radius: 24px;
+
+  background: rgba(18, 18, 34, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  box-shadow:
+    0 30px 70px rgba(0, 0, 0, 0.45),
+    0 0 24px rgba(177, 108, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+  animation: modalEnter 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .title {
   margin: 0 0 12px;
-  font-size: 26px;
-  font-weight: 700;
+  font-size: 32px;
+  line-height: 1.05;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #ffffff;
 }
 
 .message {
-  color: #444;
-  line-height: 1.5;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 15px;
+  line-height: 1.65;
 }
 
 .actions {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  margin-top: 24px;
+  flex-wrap: wrap;
+  margin-top: 28px;
 }
 
 .cancelButton,
 .confirmButton,
 .dangerButton {
-  min-width: 110px;
+  min-width: 120px;
+  min-height: 48px;
   padding: 12px 18px;
   border-radius: 14px;
-  border: 1px solid #d8d8d8;
-  background: #fff;
-  font-size: 16px;
+
+  font-size: 15px;
+  font-weight: 700;
+
   cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    opacity 0.2s ease;
 }
 
-.cancelButton:hover,
+.cancelButton {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+}
+
+.cancelButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.confirmButton {
+  border: none;
+  background: linear-gradient(135deg, #ff5fb2, #b16cff, #7c5cff);
+  color: #ffffff;
+  box-shadow: 0 10px 24px rgba(124, 92, 255, 0.28);
+}
+
 .confirmButton:hover {
-  background: #f7f7f7;
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px rgba(177, 108, 255, 0.38);
 }
 
 .dangerButton {
-  border-color: #e0b4b4;
-  color: #b00020;
+  border: 1px solid rgba(255, 110, 145, 0.22);
+  background: linear-gradient(135deg, #ff5f7a, #ff5fb2, #b16cff);
+  color: #ffffff;
+  box-shadow: 0 10px 24px rgba(255, 95, 122, 0.24);
 }
 
 .dangerButton:hover {
-  background: #fff5f6;
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px rgba(255, 95, 122, 0.34);
 }
 
-@media (max-width: 640px) {
+/* ------------------- */
+/* Modal Animations */
+/* ------------------- */
+
+@keyframes overlayFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@media (max-width: 520px) {
+  .overlay {
+    padding: 14px 10px;
+  }
+
   .modal {
-    padding: 20px;
-    border-radius: 16px;
+    padding: 20px 16px;
+    border-radius: 18px;
   }
 
   .title {
-    font-size: 22px;
+    font-size: 26px;
+  }
+
+  .message {
+    font-size: 14px;
   }
 
   .actions {

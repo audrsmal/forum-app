@@ -1,72 +1,84 @@
-import Link from "next/link";
+import { useRouter } from "next/router";
 import styles from "./styles.module.css";
 import { QuestionType } from "../../api/questions";
 import { formatDate } from "../../utils/formatDate";
 
 type QuestionCardProps = {
   question: QuestionType;
-  onLike?: (id: string) => void;
-  onDislike?: (id: string) => void;
+  onLike: (id: string) => void;
+  onDislike: (id: string) => void;
   onDelete?: (id: string) => void;
   canDelete?: boolean;
 };
 
-const QuestionCard = ({
+export default function QuestionCard({
   question,
   onLike,
   onDislike,
   onDelete,
   canDelete,
-}: QuestionCardProps) => {
+}: QuestionCardProps) {
+  const router = useRouter();
+
+  const openQuestion = () => {
+    router.push(`/question/${question.id}`);
+  };
+
   return (
-    <div className={styles.card}>
-      <Link href={`/question/${question.id}`} className={styles.content}>
-        <div className={styles.top}>
-          <div className={styles.title}>{question.title}</div>
-          <div className={styles.answers}>
-            Answers: {question.answersCount ?? 0}
+    <article className={styles.card}>
+      <div className={styles.mainArea} onClick={openQuestion}>
+        <div className={styles.header}>
+          <div className={styles.meta}>
+            <span>{question.author?.name || "Unknown author"}</span>
+            <span>•</span>
+            <span>{formatDate(question.createdAt)}</span>
           </div>
         </div>
 
-        <div className={styles.meta}>
-          <span>{question.author?.name || "Unknown author"}</span>
-          <span>•</span>
-          <span>{formatDate(question.createdAt)}</span>
-        </div>
+        <h2 className={styles.title}>{question.title}</h2>
 
         <div className={styles.body}>{question.body}</div>
-      </Link>
-
-      <div className={styles.actions}>
-        <button
-          className={
-            question.userVote === 1 ? styles.activeButton : styles.button
-          }
-          onClick={() => onLike?.(question.id)}
-        >
-          👍 {question.likes ?? 0}
-        </button>
-
-        <button
-          className={
-            question.userVote === -1 ? styles.activeButton : styles.button
-          }
-          onClick={() => onDislike?.(question.id)}
-        >
-          👎 {question.dislikes ?? 0}
-        </button>
-
-        {canDelete ? (
-          <button
-            className={styles.deleteButton}
-            onClick={() => onDelete?.(question.id)}
-          >
-            Delete
-          </button>
-        ) : null}
       </div>
-    </div>
-  );
-};
 
-export default QuestionCard;
+      <div className={styles.footer}>
+        <div className={styles.stats}>
+          <div className={styles.stat}>
+            <span className={styles.statNumber}>
+              {question.answersCount || 0}
+            </span>
+            <span className={styles.statLabel}>answers</span>
+          </div>
+        </div>
+
+        <div className={styles.actions}>
+          <button
+            className={
+              question.userVote === 1 ? styles.activeButton : styles.button
+            }
+            onClick={() => onLike(question.id)}
+          >
+            👍 {question.likes ?? 0}
+          </button>
+
+          <button
+            className={
+              question.userVote === -1 ? styles.activeButton : styles.button
+            }
+            onClick={() => onDislike(question.id)}
+          >
+            👎 {question.dislikes ?? 0}
+          </button>
+
+          {canDelete ? (
+            <button
+              className={styles.deleteButton}
+              onClick={() => onDelete?.(question.id)}
+            >
+              Delete
+            </button>
+          ) : null}
+        </div>
+      </div>
+    </article>
+  );
+}
