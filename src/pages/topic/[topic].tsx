@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import styles from "./styles.module.css";
-
 import PageTemplate from "../../components/PageTemplate/PageTemplate";
 import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
 import QuestionCard from "../../components/QuestionCard/QuestionCard";

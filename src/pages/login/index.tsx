@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
-
 import LoginForm from "../../components/LoginForm/LoginForm";
 import PageTemplate from "../../components/PageTemplate/PageTemplate";
 import { loginApi } from "../../api/auth";

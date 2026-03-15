@@ -60,10 +60,6 @@
   gap: 12px;
 }
 
-/* ========================
-   BUTTON BASE
-======================== */
-
 .link,
 .logoutButton {
   height: 42px;
@@ -88,8 +84,6 @@
     box-shadow 0.2s ease;
 }
 
-/* LOGIN + REGISTER */
-
 .link:hover {
   color: white;
 
@@ -99,8 +93,6 @@
 
   transform: translateY(-1px);
 }
-
-/* LOGOUT */
 
 .logoutButton {
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -118,10 +110,6 @@
 
   transform: translateY(-1px);
 }
-
-/* ========================
-   MOBILE
-======================== */
 
 @media (max-width: 640px) {
   .inner {

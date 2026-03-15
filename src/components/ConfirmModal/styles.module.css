@@ -117,10 +117,6 @@
   box-shadow: 0 14px 30px rgba(255, 95, 122, 0.34);
 }
 
-/* ------------------- */
-/* Modal Animations */
-/* ------------------- */
-
 @keyframes overlayFade {
   from {
     opacity: 0;

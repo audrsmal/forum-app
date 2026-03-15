@@ -57,8 +57,6 @@
   color: white;
 }
 
-/* SOCIAL ICONS */
-
 .socials {
   display: flex;
   gap: 12px;
@@ -81,8 +79,6 @@
   position: relative;
 }
 
-/* Instagram */
-
 .social.instagram:hover {
   background: linear-gradient(45deg, #f58529, #dd2a7b, #8134af, #515bd4);
 
@@ -94,8 +90,6 @@
     0 0 12px rgba(221, 42, 123, 0.4);
 }
 
-/* Facebook */
-
 .social.facebook:hover {
   background: #1877f2;
   color: white;
@@ -106,8 +100,6 @@
     0 0 10px rgba(24, 119, 242, 0.4);
 }
 
-/* X */
-
 .social.twitter:hover {
   background: white;
   color: black;
@@ -117,8 +109,6 @@
     0 6px 18px rgba(255, 255, 255, 0.35),
     0 0 10px rgba(255, 255, 255, 0.25);
 }
-
-/* MOBILE */
 
 @media (max-width: 900px) {
   .columns {
